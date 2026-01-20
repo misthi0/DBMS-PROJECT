@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Project Details Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            padding: 30px 40px;
+            background: #f8f9fa;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .project-card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        .project-card:hover {
+            box-shadow: 0 8px 16px rgba(102, 126, 234, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .project-number {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .project-title {
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .project-title h3 {
+            color: #667eea;
+            font-size: 1.5em;
+            margin-bottom: 5px;
+        }
+        
+        .timestamp {
+            color: #999;
+            font-size: 0.85em;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .badge-fullstack {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+        
+        .badge-backend {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .badge-mysql {
+            background: #fff3e0;
+            color: #e65100;
+        }
+        
+        .badge-postgresql {
+            background: #e0f2f1;
+            color: #00695c;
+        }
+        
+        .badge-mongodb {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .badge-firebase {
+            background: #fff8e1;
+            color: #f57f17;
+        }
+        
+        .project-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .detail-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #666;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            color: #333;
+            font-size: 0.95em;
+        }
+        
+        .team-members {
+            margin-top: 10px;
+        }
+        
+        .member {
+            background: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 5px;
+            border-left: 3px solid #667eea;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .member-name {
+            font-weight: 500;
+        }
+        
+        .member-reg {
+            color: #666;
+            font-size: 0.9em;
+            font-family: monospace;
+        }
+        
+        .pending-section {
+            background: #fff9e6;
+            border: 2px dashed #ffa726;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .pending-section h2 {
+            color: #f57c00;
+            margin-bottom: 15px;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 3px solid #667eea;
+        }
+        
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            
+            .container {
+                box-shadow: none;
+            }
+            
+            .project-card {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 DBMS Project Details Report</h1>
+            <p>Comprehensive Overview of All Team Projects</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">22</div>
+                <div class="stat-label">Total Teams</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">55</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">15</div>
+                <div class="stat-label">Confirmed Projects</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">7</div>
+                <div class="stat-label">Pending Decisions</div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <h2 style="color: #667eea; margin-bottom: 25px; font-size: 1.8em;">✅ Confirmed Projects</h2>
+            
+            <!-- Project 1 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">1</div>
+                    <div class="project-title">
+                        <h3>Restaurant Management System</h3>
+                        <div class="timestamp">Submitted: 1/14/2026 17:59:37</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-mysql">MySQL</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Param Kumar</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">3 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Param Kumar (Leader)</span>
+                        <span class="member-reg">RA2411026030235</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Khushal Tiwari</span>
+                        <span class="member-reg">RA2411026030203</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Misthi Maheshwari</span>
+                        <span class="member-reg">RA2411026030188</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 2 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">2</div>
+                    <div class="project-title">
+                        <h3>Hotel Management System</h3>
+                        <div class="timestamp">Submitted: 1/14/2026 22:09:40</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-mysql">SQL Workbench</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Paavni Bharti</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">2 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Paavni Bharti (Leader)</span>
+                        <span class="member-reg">RA2411026030224</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Kavyansh Mittal</span>
+                        <span class="member-reg">RA2411026030232</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 3 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">3</div>
+                    <div class="project-title">
+                        <h3>Food Delivery System</h3>
+                        <div class="timestamp">Submitted: 1/15/2026 20:18:41</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-backend">Backend Only</span>
+                    <span class="badge badge-mysql">MySQL</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Den singh</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">3 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Den singh (Leader)</span>
+                        <span class="member-reg">RA2411026030215</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Atharv saxena</span>
+                        <span class="member-reg">RA2411026030197</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Uday agarwal</span>
+                        <span class="member-reg">RA2411026030238</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 4 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">4</div>
+                    <div class="project-title">
+                        <h3>Hospital Management System</h3>
+                        <div class="timestamp">Submitted: 1/15/2026 23:17:59</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-mysql">MySQL</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Deepesh Nehra</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">3 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Deepesh Nehra (Leader)</span>
+                        <span class="member-reg">RA2411026030213</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Saksham Shrivastava</span>
+                        <span class="member-reg">RA2411026030199</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Abhijeet Sengar</span>
+                        <span class="member-reg">RA2411026030210</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 5 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">5</div>
+                    <div class="project-title">
+                        <h3>Centralized Banking System</h3>
+                        <div class="timestamp">Submitted: 1/16/2026 11:15:12</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-mysql">MySQL Workbench</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Manya Ruhela</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">3 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Manya Ruhela (Leader)</span>
+                        <span class="member-reg">RA2411026030182</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Nitin Suhag</span>
+                        <span class="member-reg">RA2411026030193</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Aditi Kaushik</span>
+                        <span class="member-reg">RA2411026030205</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 6 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">6</div>
+                    <div class="project-title">
+                        <h3>Employee Management System</h3>
+                        <div class="timestamp">Submitted: 1/16/2026 13:03:16</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-mysql">MySQL</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Gurmehar singh</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">3 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Gurmehar singh (Leader)</span>
+                        <span class="member-reg">Ra2411026030190</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Rudransh Sharma</span>
+                        <span class="member-reg">Ra2411026030201</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Dev Kaushik</span>
+                        <span class="member-reg">Ra2411026030208</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 7 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">7</div>
+                    <div class="project-title">
+                        <h3>Hospital Management System</h3>
+                        <div class="timestamp">Submitted: 1/16/2026 16:19:37</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-backend">Backend Only</span>
+                    <span class="badge badge-mysql">SQL</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">abhinav ban</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">3 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">abhinav ban (Leader)</span>
+                        <span class="member-reg">RA2411026030209</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">shivang singh</span>
+                        <span class="member-reg">RA2411026030225</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">ribhav shrivastav</span>
+                        <span class="member-reg">RA2411026030184</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 8 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">8</div>
+                    <div class="project-title">
+                        <h3>Stock Market Portfolio Tracker</h3>
+                        <div class="timestamp">Submitted: 1/16/2026 20:19:35</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-postgresql">PostgreSQL</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">aanandi gupta</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">2 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">aanandi gupta (Leader)</span>
+                        <span class="member-reg">RA2411026030195</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Aashita pamar</span>
+                        <span class="member-reg">RA2411026030196</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 9 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">9</div>
+                    <div class="project-title">
+                        <h3>Library Management System</h3>
+                        <div class="timestamp">Submitted: 1/17/2026 11:12:28</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-mysql">MySQL</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Shivansh Choudhary</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">3 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Shivansh Choudhary (Leader)</span>
+                        <span class="member-reg">RA2411026030186</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Sumit Kumar</span>
+                        <span class="member-reg">RA2411026030191</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Priyansh Ghosh</span>
+                        <span class="member-reg">RA2411026030207</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 10 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">10</div>
+                    <div class="project-title">
+                        <h3>Project Title Pending Decision</h3>
+                        <div class="timestamp">Submitted: 1/17/2026 14:41:34</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-backend">Backend Only</span>
+                    <span class="badge badge-mysql">Deciding as soon as possible</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Shreya Agarwal</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">2 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Shreya Agarwal (Leader)</span>
+                        <span class="member-reg">RA2411026030231</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Priyanshi Nagar</span>
+                        <span class="member-reg">RA2411026030228</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 11 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">11</div>
+                    <div class="project-title">
+                        <h3>The Quad</h3>
+                        <div class="timestamp">Submitted: 1/17/2026 23:59:16</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-firebase">Firebase</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Shubhangi agarwal</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">3 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Shubhangi agarwal (Leader)</span>
+                        <span class="member-reg">2411026030200</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Skandh agarwal</span>
+                        <span class="member-reg">2411026030216</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Srinjal singh</span>
+                        <span class="member-reg">2411026030218</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 12 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">12</div>
+                    <div class="project-title">
+                        <h3>Smart College Complaint and Resolution System</h3>
+                        <div class="timestamp">Submitted: 1/18/2026 11:41:50</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-mysql">SQL</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Sanjana Gupta</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">2 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Sanjana Gupta (Leader)</span>
+                        <span class="member-reg">RA2411026030192</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Shreya Khurana</span>
+                        <span class="member-reg">RA2411026030220</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 13 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">13</div>
+                    <div class="project-title">
+                        <h3>Student Management System</h3>
+                        <div class="timestamp">Submitted: 1/18/2026 21:32:29</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-mysql">MySQL, C++, HTML</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Karan Yadav</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">2 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Karan Yadav (Leader)</span>
+                        <span class="member-reg">RA24110260302187</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">Madhusudan Sharma</span>
+                        <span class="member-reg">RA2411026030211</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 14 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">14</div>
+                    <div class="project-title">
+                        <h3>Smart Student Life Manager</h3>
+                        <div class="timestamp">Submitted: 1/19/2026 20:51:41</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-mongodb">MongoDB (or PostgreSQL)</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">RUDRAKSH TYAGI</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">2 Members</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">RUDRAKSH TYAGI (Leader)</span>
+                        <span class="member-reg">RA2411026030233</span>
+                    </div>
+                    <div class="member">
+                        <span class="member-name">MANASVI TYAGI</span>
+                        <span class="member-reg">RA2411026030222</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Project 15 -->
+            <div class="project-card">
+                <div class="project-header">
+                    <div class="project-number">15</div>
+                    <div class="project-title">
+                        <h3>Full Stack Project</h3>
+                        <div class="timestamp">Submitted: 1/20/2026 16:50:10</div>
+                    </div>
+                </div>
+                <div>
+                    <span class="badge badge-fullstack">Full Stack</span>
+                    <span class="badge badge-mongodb">MongoDB</span>
+                </div>
+                <div class="project-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Team Leader</div>
+                        <div class="detail-value">Rakshit Sharma</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Team Size</div>
+                        <div class="detail-value">1 Member</div>
+                    </div>
+                </div>
+                <div class="detail-item team-members">
+                    <div class="detail-label">Team Members</div>
+                    <div class="member">
+                        <span class="member-name">Rakshit Sharma (Leader)</span>
+                        <span class="member-reg">237</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pending Projects Section -->
+            <div class="pending-section">
+                <h2>⏳ Teams with Pending Project Decisions</h2>
+                
+                <!-- Pending Team 1 -->
+                <div class="project-card" style="border-color: #ffa726;">
+                    <div class="project-header">
+                        <div class="project-number" style="background: #ff9800;">16</div>
+                        <div class="project-title">
+                            <h3 style="color: #f57c00;">Project Title: Not Decided</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge badge-fullstack">Full Stack</span>
+                        <span class="badge badge-mysql">MySQL</span>
+                    </div>
+                    <div class="project-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Team Leader</div>
+                            <div class="detail-value">Madhav Sharma</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Team Size</div>
+                            <div class="detail-value">3 Members</div>
+                        </div>
+                    </div>
+                    <div class="detail-item team-members">
+                        <div class="detail-label">Team Members</div>
+                        <div class="member">
+                            <span class="member-name">Madhav Sharma (Leader)</span>
+                            <span class="member-reg">212</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Amulya Sharma</span>
+                            <span class="member-reg">223</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Vinayak Nehwal</span>
+                            <span class="member-reg">234</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pending Team 2 -->
+                <div class="project-card" style="border-color: #ffa726;">
+                    <div class="project-header">
+                        <div class="project-number" style="background: #ff9800;">17</div>
+                        <div class="project-title">
+                            <h3 style="color: #f57c00;">Project Title: Not Decided</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge badge-fullstack">Full Stack</span>
+                        <span class="badge badge-mysql">MySQL</span>
+                    </div>
+                    <div class="project-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Team Leader</div>
+                            <div class="detail-value">Sukriti Sinha</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Team Size</div>
+                            <div class="detail-value">3 Members</div>
+                        </div>
+                    </div>
+                    <div class="detail-item team-members">
+                        <div class="detail-label">Team Members</div>
+                        <div class="member">
+                            <span class="member-name">Sukriti Sinha (Leader)</span>
+                            <span class="member-reg">217</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Surabhi Agarwal</span>
+                            <span class="member-reg">236</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Aishwarya Shrivastava</span>
+                            <span class="member-reg">239</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pending Team 3 -->
+                <div class="project-card" style="border-color: #ffa726;">
+                    <div class="project-header">
+                        <div class="project-number" style="background: #ff9800;">18</div>
+                        <div class="project-title">
+                            <h3 style="color: #f57c00;">Project Title: Not Decided</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge badge-fullstack">Full Stack</span>
+                        <span class="badge badge-mysql">MySQL</span>
+                    </div>
+                    <div class="project-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Team Leader</div>
+                            <div class="detail-value">Siddhant Sharma</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Team Size</div>
+                            <div class="detail-value">3 Members</div>
+                        </div>
+                    </div>
+                    <div class="detail-item team-members">
+                        <div class="detail-label">Team Members</div>
+                        <div class="member">
+                            <span class="member-name">Siddhant Sharma (Leader)</span>
+                            <span class="member-reg">202</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Akshit Singh</span>
+                            <span class="member-reg">185</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Mradul krishna gupta</span>
+                            <span class="member-reg">204</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pending Team 4 -->
+                <div class="project-card" style="border-color: #ffa726;">
+                    <div class="project-header">
+                        <div class="project-number" style="background: #ff9800;">19</div>
+                        <div class="project-title">
+                            <h3 style="color: #f57c00;">Project Title: Not Decided</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge badge-fullstack">Full Stack</span>
+                        <span class="badge badge-mysql">MySQL</span>
+                    </div>
+                    <div class="project-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Team Leader</div>
+                            <div class="detail-value">Sachin Thuwal</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Team Size</div>
+                            <div class="detail-value">2 Members</div>
+                        </div>
+                    </div>
+                    <div class="detail-item team-members">
+                        <div class="detail-label">Team Members</div>
+                        <div class="member">
+                            <span class="member-name">Sachin Thuwal (Leader)</span>
+                            <span class="member-reg">181</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Tushar singh bisht</span>
+                            <span class="member-reg">189</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pending Team 5 -->
+                <div class="project-card" style="border-color: #ffa726;">
+                    <div class="project-header">
+                        <div class="project-number" style="background: #ff9800;">20</div>
+                        <div class="project-title">
+                            <h3 style="color: #f57c00;">Project Title: Not Decided</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge badge-fullstack">Full Stack</span>
+                        <span class="badge badge-mysql">MySQL</span>
+                    </div>
+                    <div class="project-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Team Leader</div>
+                            <div class="detail-value">Aditya Tyagi</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Team Size</div>
+                            <div class="detail-value">3 Members</div>
+                        </div>
+                    </div>
+                    <div class="detail-item team-members">
+                        <div class="detail-label">Team Members</div>
+                        <div class="member">
+                            <span class="member-name">Aditya Tyagi (Leader)</span>
+                            <span class="member-reg">194</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Vansh Tyagi</span>
+                            <span class="member-reg">214</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Daksh Tyagi</span>
+                            <span class="member-reg">219</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pending Team 6 -->
+                <div class="project-card" style="border-color: #ffa726;">
+                    <div class="project-header">
+                        <div class="project-number" style="background: #ff9800;">21</div>
+                        <div class="project-title">
+                            <h3 style="color: #f57c00;">Project Title: Not Decided</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge badge-fullstack">Full Stack</span>
+                        <span class="badge badge-mysql">MySQL</span>
+                    </div>
+                    <div class="project-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Team Leader</div>
+                            <div class="detail-value">Shivang Arora</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Team Size</div>
+                            <div class="detail-value">2 Members</div>
+                        </div>
+                    </div>
+                    <div class="detail-item team-members">
+                        <div class="detail-label">Team Members</div>
+                        <div class="member">
+                            <span class="member-name">Shivang Arora (Leader)</span>
+                            <span class="member-reg">206</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Abhinav Sharma</span>
+                            <span class="member-reg">221</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pending Team 7 -->
+                <div class="project-card" style="border-color: #ffa726;">
+                    <div class="project-header">
+                        <div class="project-number" style="background: #ff9800;">22</div>
+                        <div class="project-title">
+                            <h3 style="color: #f57c00;">Project Title: Not Decided</h3>
+                        </div>
+                    </div>
+                    <div>
+                        <span class="badge badge-fullstack">Full Stack</span>
+                        <span class="badge badge-mysql">MySQL</span>
+                    </div>
+                    <div class="project-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Team Leader</div>
+                            <div class="detail-value">Acchyut Mishra</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Team Size</div>
+                            <div class="detail-value">2 Members</div>
+                        </div>
+                    </div>
+                    <div class="detail-item team-members">
+                        <div class="detail-label">Team Members</div>
+                        <div class="member">
+                            <span class="member-name">Acchyut Mishra (Leader)</span>
+                            <span class="member-reg">198</span>
+                        </div>
+                        <div class="member">
+                            <span class="member-name">Sheersh singh</span>
+                            <span class="member-reg">240</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p><strong>DBMS Project Details Report</strong></p>
+            <p>Generated on: January 20, 2026</p>
+            <p>Total Teams: 22 | Total Students: 55 | Confirmed: 15 | Pending: 7</p>
+        </div>
+    </div>
+    
+    <script>
+        // Print functionality
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                window.print();
+            }
+        });
+    </script>
+</body>
+</html>
